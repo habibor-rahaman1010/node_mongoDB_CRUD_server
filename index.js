@@ -42,6 +42,26 @@ async function run() {
             res.json(result);
         });
 
+        //update api
+        app.put('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateUser = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    image: updateUser.image,
+                    name: updateUser.name,
+                    email: updateUser.email,
+                    text: updateUser.text,
+                },
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+
+            console.log('updateing data', req);
+            res.json(result);
+        })
+
         // Delete api
         app.delete('/users/:id', async (req, res) => {
             const id = req.params.id;
